@@ -48,7 +48,7 @@ export function PasteViewer({ paste }: PasteViewerProps) {
         description: "Content copied to clipboard!",
         duration: 2000,
       });
-    } catch (err) {
+    } catch (_err) {
       // Fallback method using textarea
       const textarea = document.createElement('textarea');
       textarea.value = content;
@@ -65,7 +65,7 @@ export function PasteViewer({ paste }: PasteViewerProps) {
           description: "Content copied to clipboard!",
           duration: 2000,
         });
-      } catch (err) {
+      } catch (_err) {
         toast({
           variant: "destructive",
           title: "Failed to copy",
@@ -95,7 +95,7 @@ export function PasteViewer({ paste }: PasteViewerProps) {
           description: "Link copied to clipboard!",
         });
       }
-    } catch (err) {
+    } catch (_err) {
       toast({
         variant: "destructive",
         title: "Failed to share",
@@ -123,7 +123,7 @@ export function PasteViewer({ paste }: PasteViewerProps) {
         description: "Link copied to clipboard!",
         duration: 2000,
       });
-    } catch (err) {
+    } catch (_err) {
       toast({
         variant: "destructive",
         title: "Failed to copy link",

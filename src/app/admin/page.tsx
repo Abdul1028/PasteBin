@@ -1,18 +1,17 @@
 import { redirect } from 'next/navigation';
-import { AdminDashboard } from '@/components/AdminDashboard';
 import { Header } from '@/components/Header';
 
 // Simple admin check - in production, use proper authentication
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 
-async function checkAdminAuth(formData: FormData) {
+async function checkAdminAuth(formData: FormData): Promise<void> {
   'use server';
   
   const password = formData.get('password');
   if (password === ADMIN_PASSWORD) {
     redirect('/admin/dashboard');
   }
-  return { error: 'Invalid password' };
+  throw new Error('Invalid password');
 }
 
 export default function AdminPage() {

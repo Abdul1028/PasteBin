@@ -3,6 +3,7 @@
 import { Editor } from '@monaco-editor/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import type * as Monaco from 'monaco-editor';
 
 const LANGUAGE_OPTIONS = [
   { value: 'plaintext', label: 'Plain Text' },
@@ -13,6 +14,12 @@ const LANGUAGE_OPTIONS = [
   { value: 'html', label: 'HTML' },
   { value: 'css', label: 'CSS' }
 ].sort((a, b) => a.label.localeCompare(b.label));
+
+interface MonacoEditorProps {
+  value: string | undefined;
+  language: string;
+  // Add other props as needed
+}
 
 export function PasteEditor() {
   const [content, setContent] = useState('');
@@ -53,10 +60,14 @@ export function PasteEditor() {
     }
   };
 
-  const handleEditorWillMount = (monaco: any) => {
-    if (!monaco.languages.getLanguages().some((lang: any) => lang.id === 'java')) {
+  const handleEditorWillMount = (monaco: typeof Monaco) => {
+    if (!monaco.languages.getLanguages().some((lang: { id: string }) => lang.id === 'java')) {
       monaco.languages.register({ id: 'java' });
     }
+  };
+
+  const handleEditorChange = (value: string | undefined) => {
+    setContent(value || '');
   };
 
   return (
@@ -124,7 +135,7 @@ export function PasteEditor() {
           defaultLanguage="plaintext"
           language={language}
           value={content}
-          onChange={(value: string | undefined) => setContent(value || '')}
+          onChange={handleEditorChange}
           theme="vs-dark"
           beforeMount={handleEditorWillMount}
           options={{
