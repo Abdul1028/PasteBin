@@ -13,21 +13,31 @@ export function PasteEditor() {
 
   const handleSubmit = async () => {
     try {
+      const data = { 
+        content, 
+        language, 
+        title,
+        authorName: authorName || 'Anonymous'
+      };
+      
+      console.log('Submitting paste:', data);
+
       const response = await fetch('/api/pastes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ 
-          content, 
-          language, 
-          title,
-          authorName: authorName || 'Anonymous'
-        }),
+        body: JSON.stringify(data),
       });
       
-      const data = await response.json();
-      router.push(`/paste/${data.id}`);
+      const result = await response.json();
+      console.log('Response:', result);
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to create paste');
+      }
+      
+      router.push(`/paste/${result.id}`);
     } catch (error) {
       console.error('Failed to create paste:', error);
     }

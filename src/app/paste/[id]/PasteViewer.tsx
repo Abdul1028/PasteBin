@@ -9,6 +9,8 @@ interface PasteViewerProps {
 }
 
 export function PasteViewer({ paste }: PasteViewerProps) {
+  console.log('Paste data:', paste);
+  
   return (
     <div className="min-h-screen bg-background">
       <header className="p-4 border-b border-foreground/10">
@@ -22,10 +24,10 @@ export function PasteViewer({ paste }: PasteViewerProps) {
       <main className="container mx-auto p-4">
         <div className="mb-4">
           <h2 className="text-xl font-semibold">
-            {paste.title || `Untitled ${paste.language} paste`}
+            {paste.title ? paste.title : `Untitled ${paste.language} paste`}
           </h2>
           <div className="text-sm text-foreground/60 mt-1">
-            <span>by {paste.authorName} • </span>
+            <span>by {paste.authorName || 'Anonymous'} • </span>
             <span>{new Date(paste.createdAt).toLocaleString()} • </span>
             <span>{paste.language}</span>
           </div>
