@@ -145,6 +145,6 @@ createdAt DateTime @default(now())
 
 ## 📧 Contact
 
-Your Name - [@yourtwitter](https://twitter.com/yourtwitter)
+Abdul shaikh - [@abduldotexe](https://instagram.com/abduldotexe)
 
-Project Link: [https://github.com/yourusername/codepaste](https://github.com/yourusername/codepaste)
+Link tree: [Portfolio](https://linktr.ee/abduldotexe)
