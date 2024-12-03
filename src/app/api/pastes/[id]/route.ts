@@ -1,20 +1,20 @@
 import { prisma } from '@/lib/prisma';
 import { NextRequest, NextResponse } from 'next/server';
 
-interface RouteContext {
+type Props = {
   params: {
     id: string;
   };
-}
+};
 
 export async function DELETE(
-  _request: NextRequest,
-  context: RouteContext
+  request: NextRequest,
+  { params }: Props
 ) {
   try {
     await prisma.paste.delete({
       where: {
-        id: context.params.id,
+        id: params.id,
       },
     });
     

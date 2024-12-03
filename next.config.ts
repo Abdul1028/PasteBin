@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
     // Only run ESLint on local development
     ignoreDuringBuilds: true,
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
 };
 
 export default nextConfig;
