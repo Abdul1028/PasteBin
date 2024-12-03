@@ -44,46 +44,68 @@ export function PasteEditor() {
   };
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <input
-          type="text"
-          placeholder="Title (optional)"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="px-3 py-2 rounded border border-foreground/20 bg-background"
-        />
-        <input
-          type="text"
-          placeholder="Your name (optional)"
-          value={authorName}
-          onChange={(e) => setAuthorName(e.target.value)}
-          className="px-3 py-2 rounded border border-foreground/20 bg-background"
-        />
-        <select
-          value={language}
-          onChange={(e) => setLanguage(e.target.value)}
-          className="px-3 py-2 rounded border border-foreground/20 bg-background"
-        >
-          <option value="plaintext">Plain Text</option>
-          <option value="javascript">JavaScript</option>
-          <option value="typescript">TypeScript</option>
-          <option value="python">Python</option>
-          <option value="html">HTML</option>
-          <option value="css">CSS</option>
-        </select>
+        <div className="space-y-2">
+          <label htmlFor="title" className="block text-sm font-medium text-foreground/70">
+            Title
+          </label>
+          <input
+            id="title"
+            type="text"
+            placeholder="My awesome code"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full px-4 py-2 rounded-lg border border-foreground/20 bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20"
+          />
+        </div>
         
-        <button
-          onClick={handleSubmit}
-          className="px-4 py-2 bg-foreground text-background rounded hover:opacity-90"
-        >
-          Create Paste
-        </button>
+        <div className="space-y-2">
+          <label htmlFor="author" className="block text-sm font-medium text-foreground/70">
+            Your Name
+          </label>
+          <input
+            id="author"
+            type="text"
+            placeholder="Anonymous"
+            value={authorName}
+            onChange={(e) => setAuthorName(e.target.value)}
+            className="w-full px-4 py-2 rounded-lg border border-foreground/20 bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="language" className="block text-sm font-medium text-foreground/70">
+            Language
+          </label>
+          <select
+            id="language"
+            value={language}
+            onChange={(e) => setLanguage(e.target.value)}
+            className="w-full px-4 py-2 rounded-lg border border-foreground/20 bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20"
+          >
+            <option value="plaintext">Plain Text</option>
+            <option value="javascript">JavaScript</option>
+            <option value="typescript">TypeScript</option>
+            <option value="python">Python</option>
+            <option value="html">HTML</option>
+            <option value="css">CSS</option>
+          </select>
+        </div>
+
+        <div className="space-y-2 sm:self-end">
+          <button
+            onClick={handleSubmit}
+            className="w-full px-4 py-2 rounded-lg bg-foreground text-background font-medium hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-foreground/20"
+          >
+            Create Paste
+          </button>
+        </div>
       </div>
 
-      <div className="h-[600px] border border-foreground/20 rounded">
+      <div className="rounded-lg border border-foreground/20 overflow-hidden">
         <Editor
-          height="100%"
+          height="600px"
           defaultLanguage="plaintext"
           language={language}
           value={content}
@@ -91,6 +113,10 @@ export function PasteEditor() {
           theme="vs-dark"
           options={{
             minimap: { enabled: false },
+            fontSize: 14,
+            lineNumbers: 'on',
+            scrollBeyondLastLine: false,
+            wordWrap: 'on',
           }}
         />
       </div>

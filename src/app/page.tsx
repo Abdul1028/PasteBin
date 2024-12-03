@@ -1,6 +1,7 @@
 import { prisma } from '@/lib/prisma';
 import { PasteList } from '@/components/PasteList';
 import { PasteEditor } from '@/components/PasteEditor';
+import { Header } from '@/components/Header';
 
 export default async function Home() {
   const recentPastes = await prisma.paste.findMany({
@@ -11,19 +12,27 @@ export default async function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-background">
-      <header className="p-4 border-b border-foreground/10">
-        <h1 className="text-2xl font-bold">NextBin</h1>
-      </header>
+    <div className="min-h-screen bg-background flex flex-col">
+      <Header />
       
-      <main className="container mx-auto p-4 grid grid-cols-1 lg:grid-cols-2 gap-8">
-        <div>
-          <h2 className="text-xl font-semibold mb-4">Create New Paste</h2>
+      <main className="flex-1 container mx-auto p-4 grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold">Create New Paste</h2>
+            <p className="text-foreground/60">
+              Share code snippets, logs, and more with others.
+            </p>
+          </div>
           <PasteEditor />
         </div>
         
-        <div>
-          <h2 className="text-xl font-semibold mb-4">Recent Pastes</h2>
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <h2 className="text-2xl font-bold">Recent Pastes</h2>
+            <p className="text-foreground/60">
+              Browse the latest shared content from the community.
+            </p>
+          </div>
           <PasteList pastes={recentPastes} />
         </div>
       </main>
