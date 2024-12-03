@@ -2,6 +2,7 @@ import { Header } from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
+import { Github } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -127,6 +128,26 @@ export default function Home() {
               </CardContent>
             </Card>
           </div>
+        </div>
+      </section>
+
+      <section className="py-24 px-4 border-t border-border">
+        <div className="max-w-4xl mx-auto text-center space-y-4">
+          <h2 className="text-3xl font-bold">Credits</h2>
+          <p className="text-foreground/60">
+            Designed and developed with ❤️ by Abdul Shaikh
+          </p>
+          <Button
+            variant="outline"
+            size="lg"
+            className="gap-2"
+            asChild
+          >
+            <Link href="https://github.com/Abdul1028" target="_blank" rel="noopener noreferrer">
+              <Github className="w-5 h-5" />
+              Follow @Abdul1028 on GitHub
+            </Link>
+          </Button>
         </div>
       </section>
     </div>
