@@ -54,6 +54,7 @@ export function PasteEditor() {
         throw new Error(result.error || 'Failed to create paste');
       }
       
+      router.refresh();
       router.push(`/paste/${result.id}`);
     } catch (error) {
       console.error('Failed to create paste:', error);

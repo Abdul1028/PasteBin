@@ -1,3 +1,5 @@
+export const revalidate = 0;
+
 import { PasteEditor } from '@/components/PasteEditor';
 import { Header } from '@/components/Header';
 import { PasteList } from '@/components/PasteList';
