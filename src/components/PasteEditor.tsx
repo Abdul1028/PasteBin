@@ -4,6 +4,16 @@ import { Editor } from '@monaco-editor/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
+const LANGUAGE_OPTIONS = [
+  { value: 'plaintext', label: 'Plain Text' },
+  { value: 'java', label: 'Java' },
+  { value: 'javascript', label: 'JavaScript' },
+  { value: 'typescript', label: 'TypeScript' },
+  { value: 'python', label: 'Python' },
+  { value: 'html', label: 'HTML' },
+  { value: 'css', label: 'CSS' }
+].sort((a, b) => a.label.localeCompare(b.label));
+
 export function PasteEditor() {
   const [content, setContent] = useState('');
   const [language, setLanguage] = useState('plaintext');
@@ -40,6 +50,12 @@ export function PasteEditor() {
       router.push(`/paste/${result.id}`);
     } catch (error) {
       console.error('Failed to create paste:', error);
+    }
+  };
+
+  const handleEditorWillMount = (monaco: any) => {
+    if (!monaco.languages.getLanguages().some((lang: any) => lang.id === 'java')) {
+      monaco.languages.register({ id: 'java' });
     }
   };
 
@@ -84,12 +100,11 @@ export function PasteEditor() {
             onChange={(e) => setLanguage(e.target.value)}
             className="w-full px-4 py-2 rounded-lg border border-foreground/20 bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20"
           >
-            <option value="plaintext">Plain Text</option>
-            <option value="javascript">JavaScript</option>
-            <option value="typescript">TypeScript</option>
-            <option value="python">Python</option>
-            <option value="html">HTML</option>
-            <option value="css">CSS</option>
+            {LANGUAGE_OPTIONS.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.label}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -111,12 +126,15 @@ export function PasteEditor() {
           value={content}
           onChange={(value: string | undefined) => setContent(value || '')}
           theme="vs-dark"
+          beforeMount={handleEditorWillMount}
           options={{
             minimap: { enabled: false },
             fontSize: 14,
             lineNumbers: 'on',
             scrollBeyondLastLine: false,
             wordWrap: 'on',
+            tabSize: 2,
+            autoIndent: 'advanced',
           }}
         />
       </div>

@@ -15,5 +15,10 @@ export default async function PastePage({
     notFound();
   }
 
-  return <PasteViewer paste={paste} />;
+  const serializedPaste = {
+    ...paste,
+    createdAt: paste.createdAt.toISOString(),
+  };
+
+  return <PasteViewer paste={serializedPaste} />;
 } 
