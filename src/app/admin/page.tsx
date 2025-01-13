@@ -1,29 +1,30 @@
-import { Header } from '@/components/Header';
-import { prisma } from '@/lib/prisma';
-import { AdminDashboard } from '@/components/AdminDashboard';
+'use client';
 
-export default async function AdminPage() {
-  const pastes = await prisma.paste.findMany({
-    orderBy: {
-      createdAt: 'desc'
-    }
-  });
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useToast } from "@/hooks/use-toast";
+
+export default function AdminPage() {
+  const router = useRouter();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    toast({
+      variant: "destructive",
+      title: "Admin Panel",
+      description: "Currently under maintenance"
+    });
+    
+    const timeout = setTimeout(() => {
+      router.push('/');
+    }, 1500);
+
+    return () => clearTimeout(timeout);
+  }, [router, toast]);
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      <Header />
-      <main className="flex-1 container mx-auto p-4">
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h1 className="text-2xl font-bold">Admin Dashboard</h1>
-            <p className="text-foreground/60">
-              Manage all pastes from here.
-            </p>
-          </div>
-          
-          <AdminDashboard pastes={pastes} />
-        </div>
-      </main>
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-pulse">Redirecting...</div>
     </div>
   );
 } 
