@@ -4,6 +4,7 @@ import { Editor } from '@monaco-editor/react';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import type * as Monaco from 'monaco-editor';
+import { useToast } from "@/hooks/use-toast";
 
 const LANGUAGE_OPTIONS = [
   { value: 'plaintext', label: 'Plain Text' },
@@ -26,7 +27,53 @@ export function PasteEditor() {
   const [language, setLanguage] = useState('plaintext');
   const [title, setTitle] = useState('');
   const [authorName, setAuthorName] = useState('');
+  const [file, setFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
   const router = useRouter();
+  const [uploadedFiles, setUploadedFiles] = useState<Array<{ url: string, name: string }>>([]);
+  const { toast } = useToast();
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 50 * 1024 * 1024) { // 50MB limit
+      toast({
+        title: "Error",
+        description: "File size should be less than 50MB",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    try {
+      const formData = new FormData();
+      formData.append('file', file);
+      
+      const response = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      });
+      
+      if (!response.ok) {
+        throw new Error('Upload failed');
+      }
+      
+      const result = await response.json();
+      setUploadedFiles(prev => [...prev, { url: result.url, name: file.name }]);
+      
+      toast({
+        description: "File uploaded successfully!",
+      });
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast({
+        title: "Error",
+        description: "Failed to upload file",
+        variant: "destructive"
+      });
+    }
+  };
 
   const handleSubmit = async () => {
     try {
@@ -37,8 +84,6 @@ export function PasteEditor() {
         authorName: authorName || 'Anonymous'
       };
       
-      console.log('Submitting paste:', data);
-
       const response = await fetch('/api/pastes', {
         method: 'POST',
         headers: {
@@ -48,7 +93,6 @@ export function PasteEditor() {
       });
       
       const result = await response.json();
-      console.log('Response:', result);
       
       if (!response.ok) {
         throw new Error(result.error || 'Failed to create paste');
@@ -58,6 +102,11 @@ export function PasteEditor() {
       router.push(`/paste/${result.id}`);
     } catch (error) {
       console.error('Failed to create paste:', error);
+      toast({
+        title: "Error",
+        description: "Failed to create paste",
+        variant: "destructive"
+      });
     }
   };
 
@@ -128,6 +177,39 @@ export function PasteEditor() {
             Create Paste
           </button>
         </div>
+      </div>
+
+      <div className="space-y-4">
+        <div className="space-y-2">
+          <label className="block text-sm font-medium text-foreground/70">
+            Attach Files (Optional)
+          </label>
+          <input
+            type="file"
+            onChange={handleFileUpload}
+            className="w-full px-4 py-2 rounded-lg border border-foreground/20 bg-background"
+          />
+        </div>
+
+        {uploadedFiles.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-sm font-medium text-foreground/70">Uploaded Files:</p>
+            <div className="space-y-2">
+              {uploadedFiles.map((file, index) => (
+                <div key={index} className="flex items-center gap-2 text-sm">
+                  <a 
+                    href={file.url} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-blue-500 hover:underline"
+                  >
+                    {file.name}
+                  </a>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="rounded-lg border border-foreground/20 overflow-hidden">

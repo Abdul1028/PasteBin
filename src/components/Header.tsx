@@ -33,6 +33,14 @@ export function Header() {
               Recent
             </Link>
             <Link
+              href="/files"
+              className={`hover:text-foreground/80 transition-colors ${
+                pathname === '/files' ? 'text-foreground' : 'text-foreground/60'
+              }`}
+            >
+              Files
+            </Link>
+            <Link
               href="/admin"
               className={`hover:text-foreground/80 transition-colors ${
                 pathname.startsWith('/admin') ? 'text-foreground' : 'text-foreground/60'
