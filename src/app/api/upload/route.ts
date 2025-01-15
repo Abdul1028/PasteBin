@@ -19,15 +19,16 @@ export async function POST(request: Request) {
       );
     }
 
-    // Convert File to Blob
+    // Convert File to Blob and preserve the original content type
     const bytes = await file.arrayBuffer();
-    const blob = new Blob([bytes], { type: file.type });
+    const contentType = file.type || 'application/octet-stream'; // Default to binary if no type
+    const blob = new Blob([bytes], { type: contentType });
 
-    // Upload to Vercel Blob
+    // Upload to Vercel Blob with explicit content type
     const response = await put(file.name, blob, {
       access: 'public',
       addRandomSuffix: true,
-      contentType: file.type,
+      contentType: contentType,
       multipart: true
     });
     
