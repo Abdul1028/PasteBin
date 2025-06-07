@@ -2,7 +2,7 @@ import { Header } from '@/components/Header';
 import { PasteList } from '@/components/PasteList';
 import { prisma } from '@/lib/prisma';
 
-export const revalidate = 60;
+export const dynamic = 'force-dynamic';
 
 export default async function RecentPage() {
   const recentPastes = await prisma.paste.findMany({
