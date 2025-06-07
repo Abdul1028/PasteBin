@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import dynamic from 'next/dynamic';
+import { LANGUAGE_EXTENSION_MAP } from '@/components/PasteEditor';
 
 const MonacoEditor = dynamic(() => import('@monaco-editor/react').then(mod => mod.Editor), {
   ssr: false,
@@ -111,11 +112,12 @@ export function PasteViewer({ paste }: PasteViewerProps) {
   };
 
   const handleDownload = () => {
+    const extension = LANGUAGE_EXTENSION_MAP[language] || 'txt';
     const blob = new Blob([content], { type: 'text/plain' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${title || 'paste'}.${language || 'txt'}`;
+    a.download = `${title || 'paste'}.${extension}`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);

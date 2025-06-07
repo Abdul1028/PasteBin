@@ -6,15 +6,73 @@ import { useRouter } from 'next/navigation';
 import type * as Monaco from 'monaco-editor';
 import { useToast } from "@/hooks/use-toast";
 
-const LANGUAGE_OPTIONS = [
+export const LANGUAGE_OPTIONS = [
   { value: 'plaintext', label: 'Plain Text' },
   { value: 'java', label: 'Java' },
   { value: 'javascript', label: 'JavaScript' },
   { value: 'typescript', label: 'TypeScript' },
   { value: 'python', label: 'Python' },
   { value: 'html', label: 'HTML' },
-  { value: 'css', label: 'CSS' }
+  { value: 'css', label: 'CSS' },
+  { value: 'c', label: 'C' },
+  { value: 'cpp', label: 'C++' },
+  { value: 'csharp', label: 'C#' },
+  { value: 'go', label: 'Go' },
+  { value: 'php', label: 'PHP' },
+  { value: 'ruby', label: 'Ruby' },
+  { value: 'rust', label: 'Rust' },
+  { value: 'swift', label: 'Swift' },
+  { value: 'kotlin', label: 'Kotlin' },
+  { value: 'scala', label: 'Scala' },
+  { value: 'shell', label: 'Shell/Bash' },
+  { value: 'json', label: 'JSON' },
+  { value: 'xml', label: 'XML' },
+  { value: 'markdown', label: 'Markdown' },
+  { value: 'sql', label: 'SQL' },
+  { value: 'yaml', label: 'YAML' },
+  { value: 'perl', label: 'Perl' },
+  { value: 'r', label: 'R' },
+  { value: 'dart', label: 'Dart' },
+  { value: 'objective-c', label: 'Objective-C' },
+  { value: 'matlab', label: 'MATLAB' },
+  { value: 'powershell', label: 'PowerShell' },
+  { value: 'typescriptreact', label: 'TSX (TypeScript React)' },
+  { value: 'javascriptreact', label: 'JSX (JavaScript React)' },
 ].sort((a, b) => a.label.localeCompare(b.label));
+
+export const LANGUAGE_EXTENSION_MAP: Record<string, string> = {
+  plaintext: 'txt',
+  java: 'java',
+  javascript: 'js',
+  typescript: 'ts',
+  python: 'py',
+  html: 'html',
+  css: 'css',
+  c: 'c',
+  cpp: 'cpp',
+  csharp: 'cs',
+  go: 'go',
+  php: 'php',
+  ruby: 'rb',
+  rust: 'rs',
+  swift: 'swift',
+  kotlin: 'kt',
+  scala: 'scala',
+  shell: 'sh',
+  json: 'json',
+  xml: 'xml',
+  markdown: 'md',
+  sql: 'sql',
+  yaml: 'yml',
+  perl: 'pl',
+  r: 'r',
+  dart: 'dart',
+  'objective-c': 'm',
+  matlab: 'm',
+  powershell: 'ps1',
+  typescriptreact: 'tsx',
+  javascriptreact: 'jsx',
+};
 
 interface MonacoEditorProps {
   value: string | undefined;
@@ -29,6 +87,7 @@ export function PasteEditor() {
   const [authorName, setAuthorName] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const [uploadedFiles, setUploadedFiles] = useState<Array<{ url: string, name: string }>>([]);
   const { toast } = useToast();
@@ -77,6 +136,7 @@ export function PasteEditor() {
 
   const handleSubmit = async () => {
     try {
+      setIsLoading(true);
       const data = { 
         content, 
         language, 
@@ -97,7 +157,10 @@ export function PasteEditor() {
       if (!response.ok) {
         throw new Error(result.error || 'Failed to create paste');
       }
-      
+      toast({
+        title: "Success",
+        description: "Paste created successfully!"
+      });
       router.refresh();
       router.push(`/paste/${result.id}`);
     } catch (error) {
@@ -107,6 +170,8 @@ export function PasteEditor() {
         description: "Failed to create paste",
         variant: "destructive"
       });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -172,13 +237,26 @@ export function PasteEditor() {
         <div className="space-y-2 sm:self-end">
           <button
             onClick={handleSubmit}
-            className="w-full px-4 py-2 rounded-lg bg-foreground text-background font-medium hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-foreground/20"
+            disabled={isLoading}
+            className={`w-full px-4 py-2 rounded-lg font-medium transition-opacity focus:outline-none focus:ring-2 focus:ring-foreground/20
+              ${isLoading ? 'bg-gray-400 cursor-not-allowed opacity-70' : 'bg-foreground text-background hover:opacity-90'}
+            `}
           >
-            Create Paste
+            {isLoading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg className="animate-spin h-5 w-5 text-background" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4l3-3-3-3v4a8 8 0 00-8 8z" />
+                </svg>
+                Creating...
+              </span>
+            ) : (
+              "Create Paste"
+            )}
           </button>
         </div>
       </div>
-
+  
       <div className="space-y-4">
         <div className="space-y-2">
           <label className="block text-sm font-medium text-foreground/70">
