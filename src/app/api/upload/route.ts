@@ -30,6 +30,7 @@ export async function POST(request: Request) {
       addRandomSuffix: true,
       contentType: contentType,
       multipart: true
+
     });
     
     return NextResponse.json({
