@@ -38,6 +38,7 @@ export const LANGUAGE_OPTIONS = [
   { value: 'powershell', label: 'PowerShell' },
   { value: 'typescriptreact', label: 'TSX (TypeScript React)' },
   { value: 'javascriptreact', label: 'JSX (JavaScript React)' },
+  { value: 'csv', label: 'CSV' },
 ].sort((a, b) => a.label.localeCompare(b.label));
 
 export const LANGUAGE_EXTENSION_MAP: Record<string, string> = {
@@ -72,6 +73,7 @@ export const LANGUAGE_EXTENSION_MAP: Record<string, string> = {
   powershell: 'ps1',
   typescriptreact: 'tsx',
   javascriptreact: 'jsx',
+  csv: 'csv',
 };
 
 interface MonacoEditorProps {
@@ -186,7 +188,7 @@ export function PasteEditor() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div className="space-y-2">
           <label htmlFor="title" className="block text-sm font-medium text-foreground/70">
@@ -201,7 +203,6 @@ export function PasteEditor() {
             className="w-full px-4 py-2 rounded-lg border border-foreground/20 bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20"
           />
         </div>
-        
         <div className="space-y-2">
           <label htmlFor="author" className="block text-sm font-medium text-foreground/70">
             Your Name
@@ -215,7 +216,6 @@ export function PasteEditor() {
             className="w-full px-4 py-2 rounded-lg border border-foreground/20 bg-background focus:outline-none focus:ring-2 focus:ring-foreground/20"
           />
         </div>
-
         <div className="space-y-2">
           <label htmlFor="language" className="block text-sm font-medium text-foreground/70">
             Language
@@ -233,7 +233,6 @@ export function PasteEditor() {
             ))}
           </select>
         </div>
-
         <div className="space-y-2 sm:self-end">
           <button
             onClick={handleSubmit}
@@ -256,9 +255,11 @@ export function PasteEditor() {
           </button>
         </div>
       </div>
-  
-      <div className="space-y-4">
-        <div className="space-y-2">
+
+      <hr className="my-6 border-foreground/10" />
+
+      <div className="space-y-6">
+        <div className="space-y-2 bg-background/80 rounded-lg p-4 border border-foreground/10">
           <label className="block text-sm font-medium text-foreground/70">
             Attach Files (Optional)
           </label>
@@ -267,48 +268,47 @@ export function PasteEditor() {
             onChange={handleFileUpload}
             className="w-full px-4 py-2 rounded-lg border border-foreground/20 bg-background"
           />
+          {uploadedFiles.length > 0 && (
+            <div className="space-y-2 mt-2">
+              <p className="text-sm font-medium text-foreground/70">Uploaded Files:</p>
+              <div className="space-y-2">
+                {uploadedFiles.map((file, index) => (
+                  <div key={index} className="flex items-center gap-2 text-sm">
+                    <a
+                      href={file.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline hover:text-blue-700 transition-colors"
+                    >
+                      {file.name}
+                    </a>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
-        {uploadedFiles.length > 0 && (
-          <div className="space-y-2">
-            <p className="text-sm font-medium text-foreground/70">Uploaded Files:</p>
-            <div className="space-y-2">
-              {uploadedFiles.map((file, index) => (
-                <div key={index} className="flex items-center gap-2 text-sm">
-                  <a 
-                    href={file.url} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-blue-500 hover:underline"
-                  >
-                    {file.name}
-                  </a>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      <div className="rounded-lg border border-foreground/20 overflow-hidden">
-        <Editor
-          height="600px"
-          defaultLanguage="plaintext"
-          language={language}
-          value={content}
-          onChange={handleEditorChange}
-          theme="vs-dark"
-          beforeMount={handleEditorWillMount}
-          options={{
-            minimap: { enabled: false },
-            fontSize: 14,
-            lineNumbers: 'on',
-            scrollBeyondLastLine: false,
-            wordWrap: 'on',
-            tabSize: 2,
-            autoIndent: 'advanced',
-          }}
-        />
+        <div className="rounded-xl border border-foreground/20 overflow-hidden mt-4">
+          <Editor
+            height="600px"
+            defaultLanguage="plaintext"
+            language={language}
+            value={content}
+            onChange={handleEditorChange}
+            theme="vs-dark"
+            beforeMount={handleEditorWillMount}
+            options={{
+              minimap: { enabled: false },
+              fontSize: 14,
+              lineNumbers: 'on',
+              scrollBeyondLastLine: false,
+              wordWrap: 'on',
+              tabSize: 2,
+              autoIndent: 'advanced',
+            }}
+          />
+        </div>
       </div>
     </div>
   );

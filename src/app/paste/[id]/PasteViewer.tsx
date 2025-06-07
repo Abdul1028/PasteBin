@@ -146,11 +146,26 @@ export function PasteViewer({ paste }: PasteViewerProps) {
     window.open(whatsappUrl, '_blank');
   };
 
+  // Embed code logic
+  const embedUrl = typeof window !== 'undefined'
+    ? `${window.location.origin}/embed/paste/${typeof window !== 'undefined' ? window.location.pathname.split('/').pop() : ''}`
+    : '';
+  const embedCode = `<iframe src=\"${embedUrl}\" width=\"100%\" height=\"400\" frameborder=\"0\" style=\"border-radius:8px; background:#1a1a1a;\" allowfullscreen></iframe>`;
+
+  const handleCopyEmbed = async () => {
+    try {
+      await navigator.clipboard.writeText(embedCode);
+      toast({ description: 'Embed code copied to clipboard!' });
+    } catch {
+      toast({ title: 'Failed to copy', description: 'Please copy manually.' });
+    }
+  };
+
   return (
-    <div className="space-y-6 max-w-5xl mx-auto p-4">
-      <Card className="border-none shadow-lg bg-background/50 backdrop-blur-sm">
-        <CardContent className="p-6">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+    <div className="space-y-10 max-w-5xl mx-auto p-4">
+      <Card className="border-none shadow-2xl bg-background/60 backdrop-blur rounded-2xl">
+        <CardContent className="p-8">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
             <div className="space-y-2">
               <h1 className="text-3xl font-bold">{title || 'Untitled Paste'}</h1>
               <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
@@ -168,14 +183,13 @@ export function PasteViewer({ paste }: PasteViewerProps) {
                 </div>
               </div>
             </div>
-            
             <div className="flex gap-2 self-end md:self-auto">
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant="secondary"
                     size="sm"
-                    className="gap-2"
+                    className="gap-2 hover:bg-foreground/10 active:bg-foreground/20"
                   >
                     <Share2 className="w-4 h-4" />
                     Share
@@ -198,21 +212,19 @@ export function PasteViewer({ paste }: PasteViewerProps) {
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-
               <Button
                 variant="secondary"
                 size="sm"
-                className="gap-2"
+                className="gap-2 hover:bg-foreground/10 active:bg-foreground/20"
                 onClick={handleDownload}
               >
                 <Download className="w-4 h-4" />
                 Download
               </Button>
-              
               <Button
                 variant="secondary"
                 size="sm"
-                className="gap-2"
+                className="gap-2 hover:bg-foreground/10 active:bg-foreground/20"
                 onClick={handleCopy}
               >
                 {copied ? (
@@ -230,7 +242,9 @@ export function PasteViewer({ paste }: PasteViewerProps) {
             </div>
           </div>
 
-          <div className="rounded-lg overflow-hidden border bg-background/50">
+          <hr className="my-6 border-foreground/10" />
+
+          <div className="rounded-2xl overflow-hidden border bg-background/70 shadow-lg">
             <MonacoEditor
               height="600px"
               language={language.toLowerCase()}
@@ -250,6 +264,21 @@ export function PasteViewer({ paste }: PasteViewerProps) {
                 contextmenu: false,
               }}
             />
+          </div>
+
+          {/* Embed Section */}
+          <div className="mt-10 bg-background/60 rounded-xl p-5 border border-border flex flex-col gap-2">
+            <div className="font-semibold mb-1">Embed this paste:</div>
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+              <input
+                type="text"
+                value={embedCode}
+                readOnly
+                className="w-full px-2 py-1 rounded bg-background border border-border text-xs font-mono focus:outline-none focus:ring-2 focus:ring-foreground/20"
+                onFocus={e => e.target.select()}
+              />
+              <Button size="sm" className="shrink-0 hover:bg-foreground/10 active:bg-foreground/20" onClick={handleCopyEmbed}>Copy</Button>
+            </div>
           </div>
         </CardContent>
       </Card>
