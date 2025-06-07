@@ -5,10 +5,11 @@ import { notFound } from 'next/navigation';
 export default async function PastePage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
+  const { id } = await params;
   const paste = await prisma.paste.findUnique({
-    where: { id: params.id },
+    where: { id },
   });
 
   if (!paste) {
@@ -17,6 +18,7 @@ export default async function PastePage({
 
   const serializedPaste = {
     ...paste,
+    title: paste.title ?? undefined,
     createdAt: paste.createdAt.toISOString(),
   };
 

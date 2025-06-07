@@ -12,6 +12,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import dynamic from 'next/dynamic';
+
+const MonacoEditor = dynamic(() => import('@monaco-editor/react').then(mod => mod.Editor), {
+  ssr: false,
+  loading: () => <div style={{ height: 600, background: '#1e1e1e' }} />,
+});
 
 interface PasteViewerProps {
   paste: {
@@ -132,12 +138,6 @@ export function PasteViewer({ paste }: PasteViewerProps) {
     }
   };
 
-  const handleWhatsAppShare = () => {
-    const text = `${title || 'Untitled Paste'}\n${window.location.href}`;
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
-    window.open(whatsappUrl, '_blank');
-  };
-
   return (
     <div className="space-y-6 max-w-5xl mx-auto p-4">
       <Card className="border-none shadow-lg bg-background/50 backdrop-blur-sm">
@@ -174,16 +174,12 @@ export function PasteViewer({ paste }: PasteViewerProps) {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  {typeof navigator !== 'undefined' && navigator.share && (
+                  {typeof navigator !== 'undefined' && !!navigator.share && (
                     <DropdownMenuItem onClick={handleShare}>
                       <Share2 className="mr-2 h-4 w-4" />
                       Share via...
                     </DropdownMenuItem>
                   )}
-                  <DropdownMenuItem onClick={handleWhatsAppShare}>
-                    <MessageCircle className="mr-2 h-4 w-4" />
-                    Share on WhatsApp
-                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleCopyLink}>
                     <Link className="mr-2 h-4 w-4" />
                     Copy link
@@ -223,7 +219,7 @@ export function PasteViewer({ paste }: PasteViewerProps) {
           </div>
 
           <div className="rounded-lg overflow-hidden border bg-background/50">
-            <Editor
+            <MonacoEditor
               height="600px"
               language={language.toLowerCase()}
               value={content}
