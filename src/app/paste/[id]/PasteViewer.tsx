@@ -1,5 +1,4 @@
 'use client';
-
 import { Editor } from '@monaco-editor/react';
 import { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card"

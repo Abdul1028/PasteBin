@@ -3,6 +3,7 @@ import { Header } from '@/components/Header';
 import { prisma } from '@/lib/prisma';
 import { PasteList } from '@/components/PasteList';
 export const dynamic = 'force-dynamic';
+
 export default async function CreatePage() {
   const recentPastes = await prisma.paste.findMany({
     orderBy: { createdAt: 'desc' },

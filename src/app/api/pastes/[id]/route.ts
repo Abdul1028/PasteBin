@@ -7,6 +7,12 @@ type Props = {
   };
 };
 
+
+
+export async function GET() {
+  return NextResponse.json({ message: 'Not need to implement get route used for only delete' });
+}
+
 export async function DELETE(
   request: NextRequest,
   { params }: Props
