@@ -62,6 +62,32 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link
+          rel="icon"
+          href="/icon?<generated>"
+          type="image/<generated>"
+          sizes="<generated>"
+        />
+
+
+        <meta name="description" content="PasteItHere is a fast, modern platform for sharing code snippets, logs, and text. Instantly create, share, and view pastes with syntax highlighting." />
+
+        <meta property="og:url" content="https://pasteithere.vercel.app" />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Paste It Here" />
+        <meta property="og:description" content="PasteItHere - Fast, Modern Pastebin for Code, Logs, and Tex" />
+        <meta property="og:image" content="https://pasteithere.vercel.app/og-image.png" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta property="twitter:domain" content="https://pasteithere.vercel.app" />
+        <meta property="twitter:url" content="https://pasteithere.vercel.app" />
+        <meta name="twitter:title" content="Paste It Here" />
+        <meta name="twitter:description" content="Visualize your WhatsApp messages like never before." />
+        <meta name="twitter:image" content="https://pasteithere.vercel.app/og-image.png" />
+
+      </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <ThemeProvider
           attribute="class"
