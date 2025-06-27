@@ -87,6 +87,16 @@ export default function RootLayout({
         <meta name="twitter:description" content="Visualize your WhatsApp messages like never before." />
         <meta name="twitter:image" content="https://pasteithere.vercel.app/og-image.png" />
 
+        <meta property="og:image" content="<generated>" />
+        <meta property="og:image:type" content="<generated>" />
+        <meta property="og:image:width" content="<generated>" />
+        <meta property="og:image:height" content="<generated>" />
+
+        <meta name="twitter:image" content="<generated>" />
+        <meta name="twitter:image:type" content="<generated>" />
+        <meta name="twitter:image:width" content="<generated>" />
+        <meta name="twitter:image:height" content="<generated>" />
+
       </head>
       <body className={`${inter.className} min-h-screen flex flex-col`}>
         <ThemeProvider
