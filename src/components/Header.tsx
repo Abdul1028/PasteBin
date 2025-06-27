@@ -40,14 +40,6 @@ export function Header() {
             >
               Files
             </Link>
-            <Link
-              href="/admin"
-              className={`hover:text-foreground/80 transition-colors ${
-                pathname.startsWith('/admin') ? 'text-foreground' : 'text-foreground/60'
-              }`}
-            >
-              Admin
-            </Link>
           </nav>
           <ThemeToggle />
         </div>

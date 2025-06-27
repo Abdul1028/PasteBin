@@ -1,11 +1,23 @@
+'use client';
+
 import { Header } from '@/components/Header';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import Link from 'next/link';
-import { Github } from 'lucide-react';
+import { Github, Loader2 } from 'lucide-react';
 import { CodeIcon, ShareIcon, SpeedIcon } from '@/components/icons';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+  const [isLoadingRecent, setIsLoadingRecent] = useState(false);
+  const router = useRouter();
+
+  const handleViewRecent = () => {
+    setIsLoadingRecent(true);
+    router.push('/recent');
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -25,8 +37,20 @@ export default function Home() {
             <Button asChild size="lg">
               <Link href="/create">Create Paste</Link>
             </Button>
-            <Button asChild variant="secondary" size="lg">
-              <Link href="/recent">View Recent Pastes</Link>
+            <Button 
+              variant="secondary" 
+              size="lg" 
+              onClick={handleViewRecent}
+              disabled={isLoadingRecent}
+            >
+              {isLoadingRecent ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                'View Recent Pastes'
+              )}
             </Button>
           </div>
         </div>
