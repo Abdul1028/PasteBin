@@ -78,8 +78,7 @@ export default function RootLayout({
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Paste It Here" />
         <meta property="og:description" content="PasteItHere - Fast, Modern Pastebin for Code, Logs, and Tex" />
-        <meta property="og:image" content="https://pasteithere.vercel.app/og-image.png" />
-
+        
         <meta name="twitter:card" content="summary_large_image" />
         <meta property="twitter:domain" content="https://pasteithere.vercel.app" />
         <meta property="twitter:url" content="https://pasteithere.vercel.app" />
