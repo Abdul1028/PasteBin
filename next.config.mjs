@@ -1,7 +1,7 @@
 // @ts-check
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'dynamic',
+  output: 'export',
 };
 
 module.exports = nextConfig;
