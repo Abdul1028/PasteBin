@@ -1,5 +1,5 @@
 const nextConfig = {
-  // output: 'export',
+  output: 'expor',
 };
 
 module.exports = nextConfig;
